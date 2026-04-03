@@ -1,0 +1,32 @@
+[
+    {
+        "job_id": 1,
+        "title": "Chargé d'accueil",
+        "final_score": 0.14922385769557112,
+        "details": {
+            "full": 0.16898204161336985,
+            "skills": 0.11743331308726743,
+            "languages": 0.14751421481352983
+        }
+    },
+    {
+        "job_id": 3,
+        "title": "Stage Traduction",
+        "final_score": 0.1352663773521836,
+        "details": {
+            "full": 0.15115504803174684,
+            "skills": 0.0789100038515175,
+            "languages": 0.18007926090427478
+        }
+    },
+    {
+        "job_id": 2,
+        "title": "Développeur Python",
+        "final_score": 0.0,
+        "details": {
+            "full": 0.0,
+            "skills": 0.0,
+            "languages": 0.0
+        }
+    }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "job_id": 1,
+    "title": "Chargé d'accueil",
+    "description": "Nous recherchons une étudiante avec un bon sens relationnel, le travail en équipe et service client.",
+    "location": "Paris"
+  },
+  {
+    "job_id": 2,
+    "title": "Développeur Python",
+    "description": "Développeur Python Django SQL machine learning.",
+    "location": "Casablanca"
+  },
+  {
+    "job_id": 3,
+    "title": "Stage Traduction",
+    "description": "Stage en traduction français anglais italien communication.",
+    "location": "Rabat"
+  }
+]
