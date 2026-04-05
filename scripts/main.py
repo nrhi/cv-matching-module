@@ -9,7 +9,7 @@ import csv
 
 
 # =========================
-# LOAD JOBS (CSV OR JSON)
+# LOAD JOBS
 # =========================
 
 def load_jobs_from_csv(path):
@@ -18,13 +18,12 @@ def load_jobs_from_csv(path):
     with open(path, "r", encoding="utf-8-sig") as f:
         reader = csv.DictReader(f)
 
-        # 🔥 CLEAN HEADERS
+        # clean headers
         reader.fieldnames = [name.strip().lower() for name in reader.fieldnames]
-        print("CLEANED CSV columns:", reader.fieldnames)
+        print("CSV columns found:", reader.fieldnames)
 
         for i, row in enumerate(reader, start=1):
-
-            # normalize row keys too
+            # clean row keys too
             row = {k.strip().lower(): v for k, v in row.items()}
 
             job_id = row.get("job_id") or row.get("id") or i
@@ -33,7 +32,8 @@ def load_jobs_from_csv(path):
 
             description = (
                 row.get("description")
-                or row.get("descriptio")   # your broken column
+                or row.get("descriptio")
+                or row.get("job_description")
                 or ""
             )
 
@@ -50,64 +50,25 @@ def load_jobs_from_csv(path):
 
     return jobs
 
-    with open(path, "r", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
 
-        print("CSV columns found:", reader.fieldnames)
+def load_all_job_files(data_folder):
+    all_jobs = []
 
-        for i, row in enumerate(reader, start=1):
+    for file in os.listdir(data_folder):
+        if file.endswith(".csv"):
+            csv_path = os.path.join(data_folder, file)
+            print(f"Loading jobs from: {file}")
+            jobs = load_jobs_from_csv(csv_path)
+            all_jobs.extend(jobs)
 
-            # robust job_id
-            job_id = (
-                row.get("job_id")
-                or row.get("id")
-                or i
-            )
+        elif file.endswith(".json"):
+            json_path = os.path.join(data_folder, file)
+            print(f"Loading jobs from: {file}")
+            with open(json_path, "r", encoding="utf-8") as f:
+                jobs = json.load(f)
+                all_jobs.extend(jobs)
 
-            # 🔥 FIXED TITLE (your CSV uses "title")
-            title = next(
-                (row[key] for key in row if key.strip().lower() == "title"),
-                "Untitled Job"
-            )
-
-            # 🔥 FIXED DESCRIPTION (your CSV has typo like "descriptio")
-            description = next(
-                (row[key] for key in row if "descript" in key.strip().lower()),
-                ""
-            )
-
-            # optional fields
-            location = next(
-                (row[key] for key in row if "location" in key.lower()),
-                ""
-            )
-
-            company = next(
-                (row[key] for key in row if "company" in key.lower()),
-                ""
-            )
-
-            jobs.append({
-                "job_id": int(job_id) if str(job_id).isdigit() else i,
-                "title": title,
-                "description": description,
-                "location": location,
-                "company": company
-            })
-
-    return jobs
-
-
-def load_jobs(jobs_file):
-    if jobs_file.endswith(".csv"):
-        return load_jobs_from_csv(jobs_file)
-
-    elif jobs_file.endswith(".json"):
-        with open(jobs_file, "r", encoding="utf-8") as f:
-            return json.load(f)
-
-    else:
-        raise ValueError("Unsupported jobs file type")
+    return all_jobs
 
 
 # =========================
@@ -151,10 +112,8 @@ def save_results(cv_filename, results):
 # MAIN
 # =========================
 
-jobs_file = "../data/jobs.csv"
-jobs = load_jobs(jobs_file)
-
 data_folder = "../data"
+jobs = load_all_job_files(data_folder)
 
 for file in os.listdir(data_folder):
 
